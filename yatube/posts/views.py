@@ -1,18 +1,16 @@
-from multiprocessing import context
-from tokenize import group
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Group
 from .forms import PostForm
-from django.views.generic.edit import CreateView
+# from django.views.generic.edit import CreateView
 from yatube.settings import DEF_NUM_POSTS
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
-from django.views.decorators.csrf import csrf_protect
 
 
 User = get_user_model()
 group_list = Group.objects.all().values_list('title', flat=True).distinct()
+
 
 def index(request):
     post_list = Post.objects.all().order_by('-pub_date')
@@ -65,6 +63,7 @@ def post_detail(request, post_id):
     }
     return render(request, 'posts/post_detail.html', context)
 
+
 @login_required
 def post_create(request):
     if request.method == 'POST':
@@ -78,6 +77,7 @@ def post_create(request):
     form = PostForm()
     return render(request, 'posts/post_create.html',
                   {'form': form, 'group_list': group_list})
+
 
 @login_required
 def post_edit(request, post_id):
@@ -101,29 +101,3 @@ def post_edit(request, post_id):
         'group_list': group_list
     }
     return render(request, 'posts/post_create.html', context)
-    # return (request, 'posts/post_create.html', {'form': form}, is_edit)
-
-
-
-
-
-
-
-
-"""
-def post_edit(request, post_id):
-    is_edit = True
-    post = get_object_or_404(Post, pk=post_id)
-    form = PostForm(instance=post)
-    # success_url = reverse_lazy('posts:index')
-    # template_name = 'users/signup.html'
-    
-    text = post.text
-    
-    context = {
-        'text': text,
-    }
-
-    return render(request, 'posts/post_edit.html', {'form': form})
-
-"""
