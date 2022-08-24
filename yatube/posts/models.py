@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from .validators import validate_not_empty
 
 User = get_user_model()
 
@@ -32,7 +31,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='posts',
+        related_name='posts',   
         verbose_name='Автор',
     )
 
